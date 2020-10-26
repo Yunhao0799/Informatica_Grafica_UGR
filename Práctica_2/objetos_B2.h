@@ -88,7 +88,7 @@ class _rotacion: public _triangulos3D
 public:
        _rotacion();
 void  parametros(vector<_vertex3f> perfil1, int num1);
-void  parametros(vector<_vertex3f> perfil1, float altura_tapa_superior, float altura_tapa_inferior, int num1);
+// void  parametros(vector<_vertex3f> perfil1, float altura_tapa_superior, float altura_tapa_inferior, int num1);
 
 vector<_vertex3f> perfil; 
 int num;
@@ -96,17 +96,24 @@ int num;
 
 // Lo que hay que hacer
 
-// class _cono: public _rotacion{
+class _cono: public _triangulos3D{
 	
-// 	public:
-// 		_cono (float radio, float altura, int n);
+	public:
+		_cono();
+		// _cono (float radio, float altura, int n);
 
-// 	int num;
-// };
+		void  parametros(vector<_vertex3f> perfil1, int num1);
 
-// class _esfera: public _rotacion{
-// 	public:
-// 		_esfera (float radio, int n);
+	vector<_vertex3f> perfil; 
+	int num;
+};
 
-// 	int num;
-// };
+class _esfera: public _triangulos3D{
+	public:
+		_esfera();
+		// _esfera (float radio, int n);
+		void  parametros(vector<_vertex3f> perfil1, int num1);
+
+	vector<_vertex3f> perfil; 
+	int num;
+};

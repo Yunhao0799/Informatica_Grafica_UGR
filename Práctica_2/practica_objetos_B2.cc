@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ESFERA, CONO} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -32,8 +32,12 @@ int Window_x=50,Window_y=50,Window_width=450,Window_high=450;
 _cubo cubo;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
+// Este crea cilindro
 _rotacion rotacion; 
-
+// Declaracion esfera
+_esfera esfera;
+// Declaracion cono
+_cono cono; 
 // _objeto_ply *ply1;
 
 
@@ -112,10 +116,12 @@ void draw_objects()
 {
 
 switch (t_objeto){
-	case CUBO: cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-	case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,6);break;
-        case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
+		case CUBO: 		   cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+		case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,6);break;
+        case OBJETO_PLY:    ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
         case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+		case ESFERA:     esfera.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+		case CONO:         cono.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	}
 
 }
@@ -178,6 +184,8 @@ switch (toupper(Tecla1)){
         case 'C':t_objeto=CUBO;break;
         case 'O':t_objeto=OBJETO_PLY;break;	
         case 'R':t_objeto=ROTACION;break;
+		case 'E':t_objeto=ESFERA; break;
+		case 'T':t_objeto=CONO; break;
 	}
 glutPostRedisplay();
 }
@@ -267,7 +275,13 @@ perfil2.push_back(aux);
 
 rotacion.parametros(perfil2,6);
 
+// -----------------------------------------
+// Añadir parametros del cono y la esfera
 
+
+
+
+// -----------------------------------------
 
 // se llama a la inicialización de glut
 glutInit(&argc, argv);
