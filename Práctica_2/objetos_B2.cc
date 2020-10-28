@@ -5,6 +5,10 @@
 #include "objetos_B2.h"
 #include "file_ply_stl.hpp"
 
+// struct colores_Aleatorios{
+// 	int r, g, b;
+// };
+
 
 //*************************************************************************
 // _puntos3D
@@ -105,16 +109,42 @@ glEnd();
 }
 
 //*************************************************************************
+// dibujar en modo sólido con colores aleatorios
+//*************************************************************************
+void _triangulos3D::draw_solido_aleatorio()
+{
+  int i;
+  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  // glLineWidth(grosor);
+  // glColor3f(r,g,b);
+  glBegin(GL_TRIANGLES);
+
+  int r, g, b;
+  for (i=0;i<caras.size();i++){
+
+
+    glColor3ub(colores_cara[i].r, colores_cara[i].g, colores_cara[i].b);
+
+    glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
+    glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
+    glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
+  }
+  glEnd();
+
+}
+
+//*************************************************************************
 // dibujar con distintos modos
 //*************************************************************************
 
 void _triangulos3D::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
-switch (modo){
-	case POINTS:draw_puntos(r1, g1, b1, grosor);break;
-	case EDGES:draw_aristas(r1, g1, b1, grosor);break;
-	case SOLID_CHESS:draw_solido_ajedrez(r1, g1, b1, r2, g2, b2);break;
-	case SOLID:draw_solido(r1, g1, b1);break;
+  switch (modo){
+    case POINTS:draw_puntos(r1, g1, b1, grosor);break;
+    case EDGES:draw_aristas(r1, g1, b1, grosor);break;
+    case SOLID_CHESS:draw_solido_ajedrez(r1, g1, b1, r2, g2, b2);break;
+    case SOLID:draw_solido(r1, g1, b1);break;
+    case SOLID_RANDOM:draw_solido_aleatorio(); break;
 	}
 }
 
@@ -163,6 +193,16 @@ _cubo::_cubo(float tam)
   // Caras 0, 4, 7, 3
   caras[10]._0=0;caras[10]._1=4;caras[10]._2=3;
   caras[11]._0=3;caras[11]._1=4;caras[11]._2=7;
+
+  srand((unsigned) time(0));
+  //colores_cara.resize(12);
+  for(int i = 0; i < caras.size(); i++){
+    colores_Aleatorios auxiliar;
+    auxiliar.r = rand() % 255;
+    auxiliar.g = rand() % 255;
+    auxiliar.b = rand() % 255;
+    colores_cara.push_back(auxiliar);
+  }
 }
 
 
@@ -188,6 +228,16 @@ caras[2]._0=2;caras[2]._1=3;caras[2]._2=4;
 caras[3]._0=3;caras[3]._1=0;caras[3]._2=4;
 caras[4]._0=3;caras[4]._1=1;caras[4]._2=0;
 caras[5]._0=3;caras[5]._1=2;caras[5]._2=1;
+
+  srand((unsigned) time(0));
+  //colores_cara.resize(12);
+  for(int i = 0; i < caras.size(); i++){
+    colores_Aleatorios auxiliar;
+    auxiliar.r = rand() % 255;
+    auxiliar.g = rand() % 255;
+    auxiliar.b = rand() % 255;
+    colores_cara.push_back(auxiliar);
+  }
 }
 
 //*************************************************************************
@@ -235,6 +285,16 @@ for(i = 0; i < n_car; i++){
 }
 
 // Fin codigo restante propio
+
+  srand((unsigned) time(0));
+  //colores_cara.resize(12);
+  for(int i = 0; i < caras.size(); i++){
+    colores_Aleatorios auxiliar;
+    auxiliar.r = rand() % 255;
+    auxiliar.g = rand() % 255;
+    auxiliar.b = rand() % 255;
+    colores_cara.push_back(auxiliar);
+  }
 
 return(0);
 
@@ -286,7 +346,7 @@ int c = 0;
 for ( j = 0; j < num - 1; j++){
   caras[c]._0 = j*2;
   caras[c]._1 = j * 2 + 1;
-  caras[c]._2=(j+1)*2+1;
+  caras[c]._2 = (j+1)*2+1;
   c=c+1;
   caras[c]._0=(j+1)*2+1;
   caras[c]._1=(j+1)*2;
@@ -353,6 +413,15 @@ if (fabs(perfil[0].x)>0.0)
   caras[c]._2=0;
   c=c+1;
 
+  srand((unsigned) time(0));
+  //colores_cara.resize(12);
+  for(int i = 0; i < caras.size(); i++){
+    colores_Aleatorios auxiliar;
+    auxiliar.r = rand() % 255;
+    auxiliar.g = rand() % 255;
+    auxiliar.b = rand() % 255;
+    colores_cara.push_back(auxiliar);
+  }
   
 }
 
@@ -364,6 +433,84 @@ _cono::_cono()
 {
 
 }
+
+void _cono::parametros(vector<_vertex3f> perfil, int num){
+  int i,j;
+  _vertex3f vertice_aux;
+  _vertex3i cara_aux;
+  int num_aux;
+
+  // tratamiento de los vértice
+  num_aux=perfil.size();
+  // +2 al final para el punto central de arriba y abajo
+  vertices.resize(num_aux*num + 2);
+  for (j=0;j<num;j++){
+    for (i=0;i<num_aux;i++){
+     
+      vertice_aux.x=perfil[i].x*cos(2.0*M_PI*j/(1.0*num))+
+                    perfil[i].z*sin(2.0*M_PI*j/(1.0*num));
+      vertice_aux.z=-perfil[i].x*sin(2.0*M_PI*j/(1.0*num))+
+                    perfil[i].z*cos(2.0*M_PI*j/(1.0*num));
+      vertice_aux.y=perfil[i].y;
+      vertices[i+j*num_aux]=vertice_aux;
+    }
+  }
+
+  // Pintar el punto central de arriba
+  vertices[num_aux*num].x = 0.0;
+  // Cojo el valor absoluto ya que lo quiero poner mirando hacia
+  // arriba, y mi perfil tiene los puntos abajo
+  vertices[num_aux*num].y = fabs(perfil[num_aux-1].y);
+  vertices[num_aux*num].z = 0.0;
+
+  // Tratamiento de las caras 
+  caras.resize((num_aux - 1)*2*num + 2*num );
+  int c = 0;
+  for(j = 0; j < num - 1; j++){
+    caras[c]._0 = j;
+    caras[c]._1 = num*num_aux;
+    caras[c]._2 = j+1;
+    c=c+1;
+     
+  }
+
+  // Pintamos el lado lateral que falta
+  caras[c]._0=num_aux*num - 1;
+  caras[c]._1=num_aux*num;
+  caras[c]._2=0;
+  c = c+1; 
+
+  // Ahora falta por pintar la base, para ello precisaremos de crear
+  // el punto central
+  vertices[num_aux*num + 1].x = 0.0;
+  vertices[num_aux*num + 1].y = perfil[0].y;
+  vertices[num_aux*num + 1].z = 0.0;
+
+  // Tratamiento de las caras de la base
+  for(i = 0; i < num - 1; i++){
+    caras[c]._0 = i;
+    caras[c]._1 = i+1;
+    caras[c]._2 = num*num_aux + 1;
+    c=c+1;
+  }
+
+  // Cerrar la cara que falta de la base
+  caras[c]._0 = num - 1;
+  caras[c]._1 = 0;
+  caras[c]._2 = num*num_aux + 1;
+  c=c+1;  
+
+  srand((unsigned) time(0));
+  //colores_cara.resize(12);
+  for(i = 0; i < caras.size(); i++){
+    colores_Aleatorios auxiliar;
+    auxiliar.r = rand() % 255;
+    auxiliar.g = rand() % 255;
+    auxiliar.b = rand() % 255;
+    colores_cara.push_back(auxiliar);
+  }
+}
+
 
 //************************************************************************
 // Esfera

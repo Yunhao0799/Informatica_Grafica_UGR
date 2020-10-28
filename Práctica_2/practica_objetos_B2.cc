@@ -180,6 +180,7 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
+	case '5':modo=SOLID_RANDOM; break;
         case 'P':t_objeto=PIRAMIDE;break;
         case 'C':t_objeto=CUBO;break;
         case 'O':t_objeto=OBJETO_PLY;break;	
@@ -272,13 +273,24 @@ perfil2.push_back(aux);
 aux.x=1.0; aux.y=1.0; aux.z=0.0;
 perfil2.push_back(aux);
 
+int nivel_precision_objeto = 6;
 
-rotacion.parametros(perfil2,6);
+rotacion.parametros(perfil2,nivel_precision_objeto);
 
 // -----------------------------------------
 // Añadir parametros del cono y la esfera
 
+// Parametros del cono
+// Creamos un nuevo perfil para el cono, sera muy similar, pero,
+// con un elemento/punto menos
+vector<_vertex3f> perfil_cono;
 
+aux.x=1.0; aux.y=-1.0; aux.z=0.0;
+perfil_cono.push_back(aux);
+
+cono.parametros(perfil_cono, nivel_precision_objeto);
+
+// Parametros de la esfera
 
 
 // -----------------------------------------
