@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ESFERA, CONO} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, CILINDRO, ESFERA, CONO} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -32,12 +32,13 @@ int Window_x=50,Window_y=50,Window_width=450,Window_high=450;
 _cubo cubo;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
+_rotacion rotacion;
 // Este crea cilindro
-_rotacion rotacion; 
+_cilindro cilindro (0.5, 2, 12); 
 // Declaracion esfera
-_esfera esfera;
+_esfera esfera(0.5, 6, 6);
 // Declaracion cono
-_cono cono; 
+_cono cono(1, 2, 6); 
 // _objeto_ply *ply1;
 
 
@@ -119,7 +120,9 @@ switch (t_objeto){
 		case CUBO: 		   cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 		case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,6);break;
         case OBJETO_PLY:    ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
-        case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+		case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+
+        case CILINDRO: cilindro.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 		case ESFERA:     esfera.draw(modo,1.0,0.0,1.0,0.0,1.0,0.0,6);break;
 		case CONO:         cono.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	}
@@ -184,9 +187,9 @@ switch (toupper(Tecla1)){
         case 'P':t_objeto=PIRAMIDE;break;
         case 'C':t_objeto=CUBO;break;
         case 'O':t_objeto=OBJETO_PLY;break;	
-        case 'R':t_objeto=ROTACION;break;
+        case 'R':t_objeto=CILINDRO;break;
 		case 'E':t_objeto=ESFERA; break;
-		case 'T':t_objeto=CONO; break;
+		case 'N':t_objeto=CONO; break;
 	}
 glutPostRedisplay();
 }
@@ -265,17 +268,17 @@ int main(int argc, char *argv[] )
 
 // perfil 
 
-vector<_vertex3f> perfil2;
-_vertex3f aux;
+// vector<_vertex3f> perfil2;
+// _vertex3f aux;
 
-aux.x=1.0; aux.y=-1.0; aux.z=0.0;
-perfil2.push_back(aux);
-aux.x=1.0; aux.y=1.0; aux.z=0.0;
-perfil2.push_back(aux);
+// aux.x=1.0; aux.y=-1.0; aux.z=0.0;
+// perfil2.push_back(aux);
+// aux.x=1.0; aux.y=1.0; aux.z=0.0;
+// perfil2.push_back(aux);
 
-int nivel_precision_objeto = 6;
+// int nivel_precision_objeto = 6;
 
-rotacion.parametros(perfil2,nivel_precision_objeto);
+// rotacion.parametros(perfil2,6, 0);
 
 // -----------------------------------------
 // Añadir parametros del cono y la esfera
@@ -283,12 +286,12 @@ rotacion.parametros(perfil2,nivel_precision_objeto);
 // Parametros del cono
 // Creamos un nuevo perfil para el cono, sera muy similar, pero,
 // con un elemento/punto menos
-vector<_vertex3f> perfil_cono;
+// vector<_vertex3f> perfil_cono;
 
-aux.x=1.0; aux.y=-1.0; aux.z=0.0;
-perfil_cono.push_back(aux);
+// aux.x=1.0; aux.y=-1.0; aux.z=0.0;
+// perfil_cono.push_back(aux);
 
-cono.parametros(perfil_cono, nivel_precision_objeto);
+// cono.parametros(perfil_cono, nivel_precision_objeto);
 
 // Parametros de la esfera
 // vector<_vertex3f> perfil_esfera;
@@ -296,6 +299,7 @@ cono.parametros(perfil_cono, nivel_precision_objeto);
 // perfil_esfera.push_back(aux);
 // int radio = 1;
 // esfera.parametros(perfil_esfera,nivel_precision_objeto, radio);
+
 
 
 // -----------------------------------------

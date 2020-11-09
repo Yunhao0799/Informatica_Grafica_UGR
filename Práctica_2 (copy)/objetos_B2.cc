@@ -312,17 +312,32 @@ _rotacion::_rotacion()
 }
 
 
-void _rotacion::parametros(vector<_vertex3f> perfil, int num)
+void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
 {
 int i,j;
 _vertex3f vertice_aux;
 _vertex3i cara_aux;
 int num_aux;
+float radio, altura;
+
+if(tipo == 2 )
+  radio = sqrt(perfil[0].x*perfil[0].x + perfil[0].y*perfil[0].y);
+
+
+
 
 // tratamiento de los vértice
 
 num_aux=perfil.size();
+   
+if(tipo == 1){
+  num_aux=1;
+  altura=perfil[1].y;
+}
+
+
 vertices.resize(num_aux*num + 2);
+
 for (j=0;j<num;j++)
   {for (i=0;i<num_aux;i++)
      {
@@ -340,34 +355,43 @@ for (j=0;j<num;j++)
 // el total de caras es la suma de los laterales mas las tapas
 
 caras.resize((num_aux - 1) * 2 * num + 2 * num);
+
      
 // Esta parte pinta los triangulos de las caras menos la que conecta el 
 // ultimo punto con el inicial  
 int c = 0;
-for ( j = 0; j < num - 1; j++){
-  caras[c]._0 = j*2;
-  caras[c]._1 = j * 2 + 1;
-  caras[c]._2 = (j+1)*2+1;
-  c=c+1;
-  caras[c]._0=(j+1)*2+1;
-  caras[c]._1=(j+1)*2;
-  caras[c]._2=j*2;
-  c=c+1;
+
+if(tipo == 0 || tipo == 2){
+
+  for ( j = 0; j < num - 1; j++){
+    caras[c]._0 = j*num_aux+i;
+    caras[c]._1 = j * num_aux+i+1; 
+    caras[c]._2 = ((j+1)%num)*num_aux+i+1;
+    c=c+1;
+    caras[c]._0=((j+1)%num)*num_aux+i+1;
+    caras[c]._1=((j+1)%num)*num_aux+i;
+    caras[c]._2=j*num_aux+i;
+    c=c+1;
+  }
+
 }
+
 
 // cout << caras[c]._0 << " " << caras[c]._1 << " " << caras[c]._0 << " " << endl;
 
  // tapa inferior
 if (fabs(perfil[0].x)>0.0)
-  {
-    vertices[num_aux*num].x = 0.0;
-    vertices[num_aux*num].y = perfil[0].y;
-    vertices[num_aux*num].z = 0.0;
+  {  
+    vertices[num_aux*num].x=0.0; 
+    if (tipo==0) vertices[num_aux*num].y=perfil[0].y; 
+    if (tipo==1) vertices[num_aux*num].y=0.0;
+    if (tipo==2) vertices[num_aux*num].y=-radio;
+    vertices[num_aux*num].z=0.0;
 
-    for ( j = 0; j < num - 1; j++){
+    for ( j = 0; j < num; j++){
       caras[c]._0=num_aux*num;
-      caras[c]._1=j*2;
-      caras[c]._2=(j+1)*2;
+      caras[c]._1=j*num_aux+0;
+      caras[c]._2=((j+1)%num)*num_aux + 0;
       c=c+1;
     }
 
@@ -376,53 +400,45 @@ if (fabs(perfil[0].x)>0.0)
  // tapa superior
  if (fabs(perfil[num_aux-1].x)>0.0)
   {
-    vertices[num_aux*num+1].x = 0.0;
-    vertices[num_aux*num+1].y = perfil[num_aux-1].y;
-    vertices[num_aux*num+1].z = 0.0;
 
-    for ( j = 0; j < num - 1; j++){
-      caras[c]._0=num_aux*num+1;
-      caras[c]._1=j*2+1;
-      caras[c]._2=(j+1)*2+1;
+   vertices[num_aux*num+1].x=0.0; 
+   if (tipo==0) vertices[num_aux*num+1].y=perfil[num_aux-1].y; 
+   if (tipo==1) vertices[num_aux*num+1].y=altura; 
+   if (tipo==2) vertices[num_aux*num+1].y=radio; 
+   vertices[num_aux*num+1].z=0.0;
+
+   if (tipo==0 || tipo==2)
+    {for (j=0;j<num;j++)
+     {caras[c]._0=num_aux*num+1;
+      caras[c]._1=j*num_aux+1;
+      caras[c]._2=((j+1)%num)*num_aux+1;
       c=c+1;
+     }
     }
+  if (tipo==1)
+      {for (j=0;j<num;j++)
+        {caras[c]._0=num_aux*num+1;
+          caras[c]._1=j*num_aux;
+          caras[c]._2=((j+1)%num)*num_aux;
+          c=c+1;
+        }
+      }
+
   }
 
-  // Crear aqui el ultimo lado que falta, y la ultima cara qeu falta 
-  // de las tapas superiores e inferiores
 
-  // Lado lateral
-  caras[c]._0= num_aux*num-2;
-  caras[c]._1= num_aux*num-1;
-  caras[c]._2= 1;
-  c=c+1;
 
-  caras[c]._0 = 1;
-  caras[c]._1 = 0;
-  caras[c]._2 = num_aux*num-2;
-  c=c+1;
 
-  // Cerrar la cara de arriba
-  caras[c]._0=num_aux*num+1;
-  caras[c]._1=num_aux*num-1;
-  caras[c]._2=1;
-  c=c+1;
-
-  // Cerrar la cara de abajo
-  caras[c]._0=num_aux*num;
-  caras[c]._1=num_aux*num-2;
-  caras[c]._2=0;
-  c=c+1;
 
   srand((unsigned) time(0));
-  //colores_cara.resize(12);
-  for(int i = 0; i < (int) caras.size(); i++){
-    colores_Aleatorios auxiliar;
-    auxiliar.r = rand() % 255;
-    auxiliar.g = rand() % 255;
-    auxiliar.b = rand() % 255;
-    colores_cara.push_back(auxiliar);
-  }
+    //colores_cara.resize(12);
+    for(int i = 0; i < (int) caras.size(); i++){
+      colores_Aleatorios auxiliar;
+      auxiliar.r = rand() % 255;
+      auxiliar.g = rand() % 255;
+      auxiliar.b = rand() % 255;
+      colores_cara.push_back(auxiliar);
+    }
   
 }
 
@@ -430,219 +446,66 @@ if (fabs(perfil[0].x)>0.0)
 // Cono
 //************************************************************************
 
-_cono::_cono()
+_cono::_cono(float radio, float altura, int m)
 {
+  vector<_vertex3f> perfil1;
+  _vertex3f aux;
+
+  aux.x = radio; 
+  aux.y = 0.0; 
+  aux.z = 0.0;
+  perfil1.push_back(aux);
+  
+
+  aux.x = 0; 
+  aux.y = altura; 
+  aux.z = 0.0;
+  perfil1.push_back(aux);
+
+  parametros(perfil1, m, 1);
+}
+
+_cono::_cono(){
 
 }
 
-void _cono::parametros(vector<_vertex3f> perfil, int num){
-  int i,j;
-  _vertex3f vertice_aux;
-  _vertex3i cara_aux;
-  int num_aux;
-
-  // tratamiento de los vértice
-  num_aux=perfil.size();
-  // +2 al final para el punto central de arriba y abajo
-  vertices.resize(num_aux*num + 2);
-  for (j=0;j<num;j++){
-    for (i=0;i<num_aux;i++){
-     
-      vertice_aux.x=perfil[i].x*cos(2.0*M_PI*j/(1.0*num))+
-                    perfil[i].z*sin(2.0*M_PI*j/(1.0*num));
-      vertice_aux.z=-perfil[i].x*sin(2.0*M_PI*j/(1.0*num))+
-                    perfil[i].z*cos(2.0*M_PI*j/(1.0*num));
-      vertice_aux.y=perfil[i].y;
-      vertices[i+j*num_aux]=vertice_aux;
-    }
-  }
-
-  // Pintar el punto central de arriba
-  vertices[num_aux*num].x = 0.0;
-  // Cojo el valor absoluto ya que lo quiero poner mirando hacia
-  // arriba, y mi perfil tiene los puntos abajo
-  vertices[num_aux*num].y = fabs(perfil[num_aux-1].y);
-  vertices[num_aux*num].z = 0.0;
-
-  // Tratamiento de las caras 
-  caras.resize((num_aux - 1)*2*num + 2*num );
-  int c = 0;
-  for(j = 0; j < num - 1; j++){
-    caras[c]._0 = j;
-    caras[c]._1 = num*num_aux;
-    caras[c]._2 = j+1;
-    c=c+1;
-     
-  }
-
-  // Pintamos el lado lateral que falta
-  caras[c]._0=num_aux*num - 1;
-  caras[c]._1=num_aux*num;
-  caras[c]._2=0;
-  c = c+1; 
-
-  // Ahora falta por pintar la base, para ello precisaremos de crear
-  // el punto central
-  vertices[num_aux*num + 1].x = 0.0;
-  vertices[num_aux*num + 1].y = perfil[0].y;
-  vertices[num_aux*num + 1].z = 0.0;
-
-  // Tratamiento de las caras de la base
-  for(i = 0; i < num - 1; i++){
-    caras[c]._0 = i;
-    caras[c]._1 = i+1;
-    caras[c]._2 = num*num_aux + 1;
-    c=c+1;
-  }
-
-  // Cerrar la cara que falta de la base
-  caras[c]._0 = num - 1;
-  caras[c]._1 = 0;
-  caras[c]._2 = num*num_aux + 1;
-  c=c+1;  
-
-  srand((unsigned) time(0));
-  //colores_cara.resize(12);
-  for(i = 0; i < (int) caras.size(); i++){
-    colores_Aleatorios auxiliar;
-    auxiliar.r = rand() % 255;
-    auxiliar.g = rand() % 255;
-    auxiliar.b = rand() % 255;
-    colores_cara.push_back(auxiliar);
-  }
-}
 
 
 //************************************************************************
 // Esfera
 //************************************************************************
 
-// _esfera::_esfera()
-// {
-
-// }
-
-// void _esfera::parametros(vector<_vertex3f> perfil, int num, int radio_size){
-//   int i, j;
-//   _vertex3f vertice_aux;
-//   _vertex3i cara_aux;
-//   int num_aux;
-//   // Generacionde puntos verticales
-//   int vertical_points = num - 2;
-//   // // vector<_vertex3f> starting_points;
-
-//   // // Generar los puntos verticales iniciales
-//   // // Formula circulo (x-h)² + (y-h)² = r²
-
-
-//   // Tratamiento de los vertices
-//   num_aux = num;
-//   vertices.resize(num*num + 3);
-//   // vertice_aux.x = 0.0;
-//   // vertice_aux.y = 1.0;
-//   // vertice_aux.z = 0.0; 
-//   // vertices.push_back(vertice_aux);
-
-//   double aux_point_x = 0;
-//   // Generamos los puntos verticales
-
-//   for(i = 1; i < vertical_points/2; i++){
-//     aux_point_x = (i)*((perfil[0].x + radio_size)/((vertical_points*0.5)));
-//     // Calculamos la x 
-//     vertice_aux.x = aux_point_x;
-
-//     // Calculamos ahora la y asociada
-//     vertice_aux.y =  (perfil[0].y - sqrt(pow(radio_size,2) - pow((aux_point_x - perfil[0].x),2)));
-
-//     // La z inicialmente sera 0
-//     vertice_aux.z = 0.0; 
-//     vertices[i - 1] = vertice_aux;
-//   }
-
-
-//   for(i = 1; i < vertical_points/2 ; i++){
-//     aux_point_x = (i)*((perfil[0].x + radio_size)/(vertical_points*0.5));
-//     // Calculamos la x 
-//     vertice_aux.x = aux_point_x;
-
-//     // Calculamos ahora la y asociada
-//     vertice_aux.y =  fabs(perfil[0].y - sqrt(pow(radio_size,2) - pow((aux_point_x - perfil[0].x),2)));
-
-//     // La z inicialmente sera 0
-//     vertice_aux.z = 0.0; 
-//     vertices[i + vertical_points/2 - 1] = vertice_aux;
-//   }
-
-//     // aux_point_x = 0.9;
-//     // // Calculamos la x 
-//     // vertice_aux.x = aux_point_x;
-
-//     // // Calculamos ahora la y asociada
-//     // vertice_aux.y =  (perfil[0].y - sqrt(pow(radio_size,2) - pow((aux_point_x - perfil[0].x),2)));
-
-//     // // La z inicialmente sera 0
-//     // vertice_aux.z = 0.0; 
-//     // vertices.push_back(vertice_aux);
-
-
-
-
-
-//   for(j = 0; j < num; j++){
-//     for(i = 0; i < num_aux; i++){
-//       vertice_aux.x=vertices[i].x*cos(2.0*M_PI*j/(1.0*num))+
-//                     vertices[i].z*sin(2.0*M_PI*j/(1.0*num));
-
-//       vertice_aux.y=vertices[i].y;
-
-//       vertice_aux.z=-vertices[i].x*sin(2.0*M_PI*j/(1.0*num))+
-//                     vertices[i].z*cos(2.0*M_PI*j/(1.0*num));
-           
-//       vertices[i+j*num_aux]=vertice_aux;
-
-//     }
-//   }
-
-
-
-
-//   caras.resize((vertical_points - 1) * 2 * num + 2 * num);
-
-//   int c = 0;
-//   for ( j = 0; j < num - 1; j++){
-//     caras[c]._0 = j*2;
-//     caras[c]._1 = j * 2 + 1;
-//     caras[c]._2 = (j+1)*2+1;
-//     c=c+1;
-//     caras[c]._0=(j+1)*2+1;
-//     caras[c]._1=(j+1)*2;
-//     caras[c]._2=j*2;
-//     c=c+1;
-//   }
-
-
-
-//   //   // Adding top and botton point
-
-//   // // top
-//   // vertice_aux.x = 0.0;
-//   // vertice_aux.y = radio_size;
-//   // vertice_aux.z = 0.0; 
-//   // vertices.push_back(vertice_aux);
-
-//   // // botton
-//   // vertice_aux.x = 0.0;
-//   // vertice_aux.y = - radio_size;
-//   // vertice_aux.z = 0.0; 
-//   // vertices.push_back(vertice_aux);
-// }
-
 _esfera::_esfera(){
-
 
 }
 
-
 _esfera::_esfera(float radio, int n, int m){
+  vector<_vertex3f> perfil1;
+  _vertex3f aux;
 
+  for(int i = 1; i < n; i++){
+    aux.x = radio*cos(2.0*M_PI*i/n - M_PI/2.0);
+    aux.y = radio*sin(2.0*M_PI*i/n - M_PI/2.0);
+    aux.z = 0.0;
+    perfil1.push_back(aux);
+  }
+
+  parametros(perfil1, m, 2);
+}
+
+_cilindro::_cilindro(float radio, float altura, int m){
+  vector<_vertex3f> perfil1;
+  _vertex3f aux;
+
+  aux.x = radio; 
+  aux.y = -altura/2.0; 
+  aux.z = 0.0;
+  perfil1.push_back(aux);
+
+  aux.x = radio; 
+  aux.y = altura/2.0; 
+  aux.z = 0.0;
+  perfil1.push_back(aux);
+
+  parametros(perfil1, m, 0);
 }

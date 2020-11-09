@@ -98,7 +98,7 @@ class _rotacion: public _triangulos3D
 {
 public:
        _rotacion();
-void  parametros(vector<_vertex3f> perfil1, int num1);
+void  parametros(vector<_vertex3f> perfil1, int num1, int tipo);
 // void  parametros(vector<_vertex3f> perfil1, float altura_tapa_superior, float altura_tapa_inferior, int num1);
 
 vector<_vertex3f> perfil; 
@@ -107,16 +107,16 @@ int num;
 
 // Lo que hay que hacer
 
-class _cono: public _triangulos3D{
+class _cono: public _rotacion{
 	
 	public:
 		_cono();
-		// _cono (float radio, float altura, int n);
+		_cono (float radio, float altura, int m);
 
-		void  parametros(vector<_vertex3f> perfil1, int num1);
+		// void  parametros(vector<_vertex3f> perfil1, int num1);
 
 	// vector<_vertex3f> perfil; 
-	int num;
+	// int num;
 };
 
 class _esfera: public _rotacion{
@@ -128,6 +128,11 @@ class _esfera: public _rotacion{
 
 	// vector<_vertex3f> perfil; 
 	// int num;
+};
+
+class _cilindro: public _rotacion{
+	public:
+		_cilindro(float radio, float altura, int m);
 };
 
 
@@ -150,3 +155,6 @@ class _esfera: public _rotacion{
 //    if (tipo==1) vertices[num_aux*num+1].y=altura; 
 //    if (tipo==2) vertices[num_aux*num+1].y=radio; 
 //    vertices[num_aux*num+1].z=0.0;
+
+
+// Crear leer desde un ply
