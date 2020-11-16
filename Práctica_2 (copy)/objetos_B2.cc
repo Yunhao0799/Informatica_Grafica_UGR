@@ -363,6 +363,19 @@ int c = 0;
 
 if(tipo == 0 || tipo == 2){
 
+<<<<<<< HEAD
+  for ( j = 0; j < num; j++){
+    for(i = 0; i < num_aux -1; i++){
+      caras[c]._0 = j*num_aux+i;
+      caras[c]._1 = j * num_aux+i+1; 
+      caras[c]._2 = ((j+1)%num)*num_aux+i+1;
+      c=c+1;
+      caras[c]._0=((j+1)%num)*num_aux+i+1;
+      caras[c]._1=((j+1)%num)*num_aux+i;
+      caras[c]._2=j*num_aux+i;
+      c=c+1;
+    }
+=======
   for ( j = 0; j < num - 1; j++){
     caras[c]._0 = j*num_aux+i;
     caras[c]._1 = j * num_aux+i+1; 
@@ -372,6 +385,7 @@ if(tipo == 0 || tipo == 2){
     caras[c]._1=((j+1)%num)*num_aux+i;
     caras[c]._2=j*num_aux+i;
     c=c+1;
+>>>>>>> 399cf29878ca43166a4afd81b23c749b3a846056
   }
 
 }
@@ -409,10 +423,19 @@ if (fabs(perfil[0].x)>0.0)
 
    if (tipo==0 || tipo==2)
     {for (j=0;j<num;j++)
+<<<<<<< HEAD
+     {
+        caras[c]._0=num_aux*num+1;
+        caras[c]._1=j*num_aux + num_aux -1;
+        caras[c]._2=((j+1)%num)*num_aux+num_aux-1;
+        c=c+1;
+      
+=======
      {caras[c]._0=num_aux*num+1;
       caras[c]._1=j*num_aux+1;
       caras[c]._2=((j+1)%num)*num_aux+1;
       c=c+1;
+>>>>>>> 399cf29878ca43166a4afd81b23c749b3a846056
      }
     }
   if (tipo==1)
@@ -484,8 +507,13 @@ _esfera::_esfera(float radio, int n, int m){
   _vertex3f aux;
 
   for(int i = 1; i < n; i++){
+<<<<<<< HEAD
+    aux.x = radio*cos(M_PI*i/n - M_PI/2.0);
+    aux.y = radio*sin(M_PI*i/n - M_PI/2.0);
+=======
     aux.x = radio*cos(2.0*M_PI*i/n - M_PI/2.0);
     aux.y = radio*sin(2.0*M_PI*i/n - M_PI/2.0);
+>>>>>>> 399cf29878ca43166a4afd81b23c749b3a846056
     aux.z = 0.0;
     perfil1.push_back(aux);
   }
