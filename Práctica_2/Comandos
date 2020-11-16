@@ -1,6 +1,0 @@
-case 'P':t_objeto=PIRAMIDE;break;
-case 'C':t_objeto=CUBO;break;
-case 'O':t_objeto=OBJETO_PLY;break;	
-case 'R':t_objeto=ROTACION;break;
-case 'E':t_objeto=ESFERA; break;
-case 'T':t_objeto=CONO; break;
