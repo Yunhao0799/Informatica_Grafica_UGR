@@ -70,20 +70,18 @@ glEnd();
 
 void _triangulos3D::draw_solido(float r, float g, float b)
 {
-
-int i;
-glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-// glLineWidth(grosor);
-glColor3f(r,g,b);
-glBegin(GL_TRIANGLES);
-for (i=0;i<(int) caras.size();i++){
-  
-	glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
-	glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
-	glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
-}
-glEnd();
-
+  int i;
+  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  // glLineWidth(grosor);
+  glColor3f(r,g,b);
+  glBegin(GL_TRIANGLES);
+  for (i=0;i<(int) caras.size();i++){
+    
+    glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
+    glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
+    glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
+  }
+  glEnd();
 }
 
 //*************************************************************************
@@ -92,21 +90,18 @@ glEnd();
 
 void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2)
 {
-int i;
-glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-// glLineWidth(grosor);
-// glColor3f(r,g,b);
-glBegin(GL_TRIANGLES);
-for (i=0;i<(int) caras.size();i++){
-  if(i%2 == 0) glColor3f(r1,g1,b1);
-  else glColor3f(r2,g2,b2);
+  int i;
+  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  glBegin(GL_TRIANGLES);
+  for (i=0;i<(int) caras.size();i++){
+    if(i%2 == 0) glColor3f(r1,g1,b1);
+    else glColor3f(r2,g2,b2);
 
-	glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
-	glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
-	glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
-}
-glEnd();
-
+    glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
+    glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
+    glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
+  }
+  glEnd();
 }
 
 //*************************************************************************
