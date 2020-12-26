@@ -1,0 +1,79 @@
+<div class="dropdown">
+    <h3>Study programm</h3>
+    <div class="answer">
+        <h3>Computer Science </h3>
+            <div class="answer">
+            <p><a href="https://www.w3schools.com" target="_blank">Bachelor</a></p>
+            <p><a href="https://www.w3schools.com" target="_blank">Master</a></p>
+            <p><a href="https://www.w3schools.com" target="_blank">PhD</a></p>
+            <p><a href="https://www.w3schools.com" target="_blank">Show all</a></p>
+            <p></p>
+            <p></p>
+            </div>
+        
+        <p></p>
+        <p></p>
+      
+        <h3>Whatever weird thing Lisa's studying</h3>
+            <div class="answer">
+            <p><a href="https://www.w3schools.com" target="_blank">Bachelor</a></p>
+            <p><a href="https://www.w3schools.com" target="_blank">Master</a></p>
+            <p><a href="https://www.w3schools.com" target="_blank">PhD</a></p>
+            <p><a href="https://www.w3schools.com" target="_blank">Show all</a></p>
+            <p></p>
+            <p></p>
+            </div>
+        <p></p>
+        <p></p>
+    </div>
+</div>
+    
+<style>
+/* Dropdown Box */
+.dropdown {
+margin-bottom: 3vw; /*spacing between boxes */
+}
+
+.dropdown h3{
+font-size: 1.3rem; /*question font size */
+background: #CCCCCC; /*box background colour */
+color: #FFFFFF !important; /*question text colour*/
+padding: 10px;
+outline: #CCCCCC solid 3px; /*outline around box*/
+outline-offset: 3px; /*spacing between box and outline*/
+margin: auto 0px;
+cursor: pointer;
+}
+
+.dropdown p {
+font-style: italic; /* answer italic */
+}
+
+.answer {
+display: none;
+margin-top: 4vw; /*space between question and answer */
+border-left: #e3e3e3 solid 1px; /*grey line beside answer */
+padding-left: 2vw; /*space between line and answer */
+}
+
+.dropdown h3:after{
+content: "\2193"; /* arrow */
+text-align:right;
+float: right;
+}
+    
+    
+</style>
+
+
+
+
+
+
+<script type="text/javascript"src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+$(".dropdown h3").click(function() {
+$(this).nextUntil("h3").slideToggle("slow");
+});
+</script>

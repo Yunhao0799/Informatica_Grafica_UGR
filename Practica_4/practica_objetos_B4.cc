@@ -6,8 +6,8 @@
 #include <ctype.h>
 #include <math.h>
 #include <vector>
-#include "objetos_B3.h"
-
+#include "objetos_B4.h"
+#include <unistd.h>
 
 using namespace std;
 
@@ -22,6 +22,9 @@ int velocidad_inclinacion_torso = 5;
 const int MAX_VELOCIDAD = 15;
 int velocidad_cabeza = 5;
 bool flag = 0;
+
+// Variable que se encarga de la rotacion de la lux
+float alfa = 0.0;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -144,6 +147,25 @@ void draw_objects()
 
 }
 
+void luces(float alfa){
+	float luz_ambiente[]={0.2, 0.2, 0.2, 1.0};
+	float luz1[] = {1.0, 1.0, 1.0, 1.0};
+	float pos1[] = {0, 0, 30.0, 1.0};
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, luz_ambiente);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, luz1);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, luz1);
+
+	glPushMatrix();
+	// Rotacion de la luz alrededor del eje y
+	glRotatef(alfa, 0, 1, 0);
+	glLightfv(GL_LIGHT1, GL_POSITION, pos1);
+	glPopMatrix();
+
+	glDisable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+}
+
 
 //**************************************************************************
 //
@@ -154,6 +176,7 @@ void draw(void)
 
 clean_window();
 change_observer();
+luces(alfa);
 draw_axis();
 draw_objects();
 	if(t_objeto == ARTICULADO){
@@ -169,6 +192,8 @@ draw_objects();
 	else{
 		glClearColor(1,1,1,1);
 	}
+
+
 glutSwapBuffers();
 }
 
@@ -248,10 +273,17 @@ switch (toupper(Tecla1)){
 	case '3':modo=SOLID;		break;
 	case '4':modo=SOLID_CHESS;	break;
 	case '5':modo=SOLID_RANDOM; break;
+	case '6':modo=SOLID_ILLUMINATED_FLAT; break;
+	case '7':modo=SOLID_ILLUMINATED_GOURAUD; break;
 
 	case 'P':t_objeto=PIRAMIDE;		break;
 	case 'C':t_objeto=CUBO;			break;
-	case 'O':t_objeto=OBJETO_PLY;	break;	
+	case 'O':
+		// usleep(500);
+		t_objeto=OBJETO_PLY; 
+		// ply.b_normales_caras =false; 
+		// ply.b_normales_vertices = false;	
+		break;	
 	case 'R':t_objeto=CILINDRO;		break;
 	case 'E':t_objeto=ESFERA; 		break;
 	case 'N':t_objeto=CONO; 		break;
@@ -353,6 +385,14 @@ switch (toupper(Tecla1)){
 
 	case 'L':
 		final.reset();
+		break;
+
+	case '8':
+		alfa += 5;
+		break;
+
+	case '9':
+		alfa -= 5;
 		break;
 
 }
